@@ -10,19 +10,24 @@ binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 {
 	binary_tree_t *auxi, *pivot;
 
-	if (tree == NULL)
+	if (tree == NULL || tree->left == NULL)
 		return (NULL);
-	if (tree->left)
+
+	auxi = tree->left;
+	pivot = auxi->right;
+	auxi->right = tree;
+	tree->left = pivot;
+	if (pivot != NULL)
+		pivot->parent = tree;
+	pivot = tree->parent;
+	tree->parent = auxi;
+	auxi->parent = pivot;
+	if (pivot != NULL)
 	{
-		pivot = tree->left->right;
-		auxi = tree->left;
-		auxi->parent = tree->parent;
-		auxi->right = tree;
-		tree->parent = auxi;
-		tree->left = pivot;
-		if (pivot)
-			temp->parent = tree;
-		return (auxi);
+		if (pivot->left == tree)
+			pivot->left = auxi;
+		else
+			pivot->right = auxi;
 	}
-	return (NULL);
+	return (pivot);
 }
